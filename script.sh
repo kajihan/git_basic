@@ -1,12 +1,19 @@
 #!/bin/bash
 
-# Request the initial counter value from the user
-read -p "Enter the initial counter value: " start_counter
+# Directory to scan
+DIR="/path/to/directory"
+LOGFILE="/path/to/logfile.log"
 
-# Loop that subtracts 1 from the counter until it reaches zero
-while [ $start_counter -gt 0 ]; do
-    echo $start_counter
-    ((start_counter--))
+# Create or clear the logfile
+> "$LOGFILE"
+
+# List files and log their sizes
+for FILE in "$DIR"/*; do
+  if [ -f "$FILE" ]; then
+    FILESIZE=$(stat --printf="%s" "$FILE")
+    echo "File: $FILE Size: $FILESIZE bytes" >> "$LOGFILE"
+  fi
 done
 
-echo "Counter has reached zero."
+# Summary
+echo "Scan complete. Details logged to $LOGFILE."
